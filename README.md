@@ -1,0 +1,3 @@
+# myGitRemoteProject
+myGit远程项目
+SecondActivity用来访问provider，点击button之后会跳转进入ThirdActivity展示查询到的内容
