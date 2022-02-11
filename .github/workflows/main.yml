@@ -1,35 +1,27 @@
-# This is a basic workflow to help you get started with Actions
-
 name: stuhealth-checkin
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
   schedule:
-    - cron: '0 0 10 * *'
-    
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+    # * is a special character in YAML so you have to quote this string
+    - cron: '0 10 * * *'
+
 jobs:
-  # This workflow contains a single job called "build"
   stuhealth-checkin:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      # Runs a single command using the runners shell
       - name: Clone stuhealth repository
         run: git clone https://github.com/SO-JNU/stuhealth.git
-
-      # Runs a set of commands using the runners shell
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-              python-version: 3.x
-              architecture: x64
+          python-version: 3.x
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install pip dependencies
+        working-directory: stuhealth
+        run: pip install -U -r requirements.txt
+      - name: Run stuhealth
+        working-directory: stuhealth
+        run: python stuhealth.py -u ${{ secrets.username }} -p ${{ secrets.password }} -ve ${{ secrets.validatorEndpoint }} -vt ${{ secrets.validatorToken }}
