@@ -33,6 +33,3 @@ jobs:
         with:
               python-version: 3.x
               architecture: x64
-      - name: Cache pip dependencies
-        uses: actions/cache@v2
-        with:
